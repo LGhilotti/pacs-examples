@@ -1,4 +1,4 @@
-EXAMPLES AND EXERCISES FOR PACS COURSE
+AEXAMPLES AND EXERCISES FOR PACS COURSE
 --------------------------------------
 
 This repo contains source code and descriptions for the examples and exercises
