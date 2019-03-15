@@ -11,6 +11,7 @@ matrix
 private :
   
   std::vector<double> data;
+  std::vector<int>    p;
   const unsigned int rows;
   const unsigned int cols;
 
@@ -28,6 +29,8 @@ private :
   const_index (unsigned int irow, unsigned int jcol) const
   { return data[sub2ind (irow, jcol)]; };
 
+  bool factorized;
+  
 public :
 
   matrix (unsigned int size)
@@ -69,11 +72,7 @@ public :
   solve (matrix &rhs);
 
   void
-  gauss_seidel
-  (const matrix &f,
-   matrix &uh,
-   const unsigned int maxit = 100,
-   const double tol = 1.e-9);
+  factorize ();
   
 };
 

@@ -11,7 +11,6 @@ matrix
 private :
   
   std::vector<double> data;
-  std::vector<int>    p;
   const unsigned int rows;
   const unsigned int cols;
 
@@ -29,8 +28,6 @@ private :
   const_index (unsigned int irow, unsigned int jcol) const
   { return data[sub2ind (irow, jcol)]; };
 
-  bool factorized;
-  
 public :
 
   matrix (unsigned int size)
@@ -70,9 +67,6 @@ public :
 
   void
   solve (matrix &rhs);
-
-  void
-  factorize ();
   
 };
 
