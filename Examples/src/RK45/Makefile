@@ -1,6 +1,6 @@
 ############################################################
 #
-# An example of Makefile for the course on 
+# An example of Makefile for the course on
 # Advanced Programming for Scientific Computing
 # It should be modified for adapting it to the various examples
 #
@@ -13,7 +13,7 @@
 # The only user defined variable that must be set in this file is
 # the one indicating where Makefile.h resides
 
-MAKEFILEH_DIR=../../
+MAKEFILEH_DIR=~/Documents/pacs-examples/Examples/src/RK45
 include $(MAKEFILEH_DIR)/Makefile.inc
 #
 # You may have an include file also in the current directory
@@ -36,7 +36,7 @@ INCLUDES=-I. -I$(PACS_INC_DIR)
 ifeq ($(LIBTYPE),DYNAMIC)
  CXXFLAGS+=-fPIC
  LIBRARY=$(DYNAMIC_LIBFILE)
- LDFLAGS+=-dynamic 
+ LDFLAGS+=-dynamic
 else
  LIBRARY=$(STATIC_LIBFILE)
 # LDFLAGS+=-static # this is causing problems if you do not have static system lbraries
@@ -101,9 +101,9 @@ all:
 depend: $(DEPEND)
 
 static:
-	$(MAKE) $(STATIC_LIBFILE) LIBTYPE=STATIC 
+	$(MAKE) $(STATIC_LIBFILE) LIBTYPE=STATIC
 	$(MAKE) exec LIBTYPE=STATIC
- 
+
 dynamic:
 	$(MAKE) $(DYNAMIC_LIBFILE) LIBTYPE=DYNAMIC
 	$(MAKE) exec LIBTYPE=DYNAMIC
@@ -155,7 +155,3 @@ $(DEPEND): $(SRCS)
 	done
 
 -include $(DEPEND)
-
-
-
-

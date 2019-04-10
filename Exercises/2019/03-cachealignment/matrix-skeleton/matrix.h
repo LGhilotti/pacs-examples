@@ -9,24 +9,27 @@ matrix
 {
 
 private :
-  
+
   std::vector<double> data;
   const unsigned int rows;
   const unsigned int cols;
+  std::vector<unsigned int>    p;
 
   inline
   unsigned int
   sub2ind (const unsigned int ir,
            const unsigned int jc) const
-  { return (ir + jc * rows); };
+  { return (ir + jc * rows); }; //position in the vector data of the element (ir,jc); data stores column major.
 
   double &
   index (unsigned int irow, unsigned int jcol)
-  { return data[sub2ind (irow, jcol)]; };
+  { return data[sub2ind (irow, jcol)]; }; //called if you want to modify the element (irow,jcol) of the matrix.
 
   const double &
   const_index (unsigned int irow, unsigned int jcol) const
-  { return data[sub2ind (irow, jcol)]; };
+  { return data[sub2ind (irow, jcol)]; }; //called if you want to return the element (irow,jcol)
+
+  bool factorized;
 
 public :
 
@@ -39,8 +42,8 @@ public :
     : rows (rows_), cols (cols_)
   { data.resize (rows * cols, 0.0); };
 
-  matrix (matrix const &) = default;  
-  
+  matrix (matrix const &) = default;
+
   unsigned int
   get_rows () const { return rows; }
 
@@ -49,7 +52,7 @@ public :
 
   double &
   operator() (unsigned int irow, unsigned int jcol)
-  { return index (irow, jcol); };
+  { return index (irow, jcol); }; //called to modify the element (irow,jcol): it relies on the index private function.
 
   const double &
   operator()  (unsigned int irow, unsigned int jcol) const
@@ -67,7 +70,10 @@ public :
 
   void
   solve (matrix &rhs);
-  
+
+  void
+  factorize ();
+
 };
 
 /// matrix x matrix product : C = A * B

@@ -1,18 +1,25 @@
-CXX       ?= g++
-CXXFLAGS  ?= -std=c++11 
+CXX       = g++
+CXXFLAGS  ?= -std=c++14
 CPPFLAGS  ?= -I. -Wno-conversion-null -Wno-deprecated-declarations
-LDFLAGS   ?= 
-LIBS      ?= 
+LDFLAGS   ?=
+LIBS      ?=
 
-all : newton_example
+OBJECTS=main.o
+SOURCES=main.cpp
+HEADERS=newton.h
+EXEC=newton_example
 
-newton_example : #dependencies
-	#rules
+all : $(EXEC)
+
+%.o: %.cpp $(HEADERS)
+	$(CXX) -c $(CXXFLAGS) $(CPPFLAGS) $<
+
+$(EXEC) : $(OBJECTS)
+	$(CXX) -o $@ $^
+
 
 clean :
 	$(RM) *.o
 
 distclean : clean
 	$(RM) $(EXEC) $(EXECMP)
-
-

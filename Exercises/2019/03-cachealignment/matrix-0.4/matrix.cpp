@@ -3,19 +3,12 @@
 #include <algorithm>
 #include <ctime>
 
-matrix
-matrix::transpose () const
-{
-  matrix retval (get_cols (), get_rows ());
-  unsigned int i, j;
-  for (j = 0; j < retval.get_cols (); ++j)
-    for (i = 0; i < retval.get_rows (); ++i)
-      retval (i, j) = const_index (j, i);
-  return (retval);
-}
+//in order to use this function, you have to:
+// in the linking phase indicate -L$mkOpenblasLib -lopenblas
+//this is only precompiled executables, does not have headers (nothing to #include)
 
 #if defined (USE_DGEMM)
-#define dgemm dgemm_
+#define dgemm dgemm_ // ?? where do you use this definition? what for?
 #define DGEMM dgemm_
 
 extern "C"
@@ -29,6 +22,16 @@ extern "C"
 }
 #endif
 
+matrix
+matrix::transpose () const
+{
+  matrix retval (get_cols (), get_rows ());
+  unsigned int i, j;
+  for (j = 0; j < retval.get_cols (); ++j)
+    for (i = 0; i < retval.get_rows (); ++i)
+      retval (i, j) = const_index (j, i);
+  return (retval);
+}
 
 #if defined (MAKE_TMP_TRANSP)
 matrix
@@ -137,19 +140,6 @@ matrix::solve (matrix &rhs)
     }
 };
 
-#ifdef USE_LEVEL1
-#define DAXPY  daxpy_
-#define daxpy  daxpy_
-extern "C"
-{
-
-  void
-  daxpy (const int *N, const double *DA, const double *DX,
-         const int *INCX, double *DY, const int *INCY);
-
-}
-#endif
-
 void
 matrix::factorize ()
 {
@@ -165,7 +155,7 @@ matrix::factorize ()
   int imaxpivot = 0;
 
   assert (m == n);
-  for (ii = 0; ii < m-1; ++ii)
+  for (ii = 0; ii < m-1; ++ii) //except the last column because there is nothing under diagonal element
     {
       maxpivot = index (p[ii], ii);
       imaxpivot = ii;
@@ -179,28 +169,14 @@ matrix::factorize ()
       if (imaxpivot != ii)
         std::swap (p[ii], p[imaxpivot]);
 
-      pivot = index (p[ii], ii);
+      pivot = index (p[ii], ii); //index returns a reference?
       for (jj = ii+1; jj < m; ++jj)
         {
           index (p[jj],ii) = index (p[jj],ii) / pivot;
 
-#ifdef USE_LEVEL1
-          
-          const int N = n - (ii + 1);
-          const double DA = - index (p[jj],ii);
-          const double *DX = get_data () + p[ii] + (ii+1) * m;
-          double *DY = get_data () + p[jj] + (ii+1) * m;
-          const int INCX = m;
-          const int INCY = m;
-          daxpy (&N, &DA, DX, &INCX, DY, &INCY);
-
-#else
-
           for (kk = ii+1; kk < n; ++kk)
             index (p[jj],kk) +=
               -index (p[ii],kk) * index (p[jj],ii);
-
-#endif
 
         }
     }

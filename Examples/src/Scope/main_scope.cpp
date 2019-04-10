@@ -1,11 +1,11 @@
 #include<iostream>
+#include "head.hpp"
 /*! A simple exercise on the concept of scope.
 
 Are you able to guess what will be printed on the terminal?
 */
 
  // Global variables (in the global scope)
-int g=10;
 int f=30;
 // Namespace variable
 namespace pippo
@@ -24,6 +24,7 @@ int main()
   int f=55;
   cout<<"Local g "<< g<<", Global g "<<::g<<endl;
   cout<<"pippo g "<< pippo::g<<", pluto g "<<pippo::pluto::g<<endl;
+  cout<<"nuova: "<<::c<<endl;
   {
     double f=9.9;// overrides f in the outer scope, which is now inaccessible!
     // While the global f is still accessible using full qualified name
@@ -32,5 +33,5 @@ int main()
   // for loops variables are in a local scope!
   for (int g=1;g<3;++g) cout<<g<<" ";
   cout<<endl;
-  
+
 }

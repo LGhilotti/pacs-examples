@@ -6,12 +6,12 @@
 // Some examples of functors (also called function object)
 /*
   A function object is any object of class type that defines the call operator.
-  They behave very similar to a function but they may have a state 
-  (variable members) and possibly other methods as well, so they may be more 
+  They behave very similar to a function but they may have a state
+  (variable members) and possibly other methods as well, so they may be more
   flexible.
 
-  Moreover termplate functors allow partial specialization, which is not allowed  in normal template functions. This may be useful for some 
-  metaprogramming techniques.
+  Moreover template functors allow partial specialization, which is not allowed in normal template functions.
+  This may be useful for some metaprogramming techniques.
  */
 namespace myfunctors
 {
@@ -35,10 +35,10 @@ namespace myfunctors
     double operator ()(double a) const;
     //! max number of iterations
     unsigned int maxiter;
-    //! Absolute tolerance 
+    //! Absolute tolerance
     //! defined in class
     double tolerance;
-    //! Initial value. 
+    //! Initial value.
     double x0;
   };
   //! A predicate is a function or functor that defines a call operator
@@ -46,14 +46,14 @@ namespace myfunctors
   /*!  Here I show why the state can be useful. Here I have a functor
     that returns true if the value passed is greater than a value that
     may be changed run time.
-    
+
     Since all methods are simple I will define them in class (no need
     of cpp file) It is a unary function so I inherit from the
     corresponding std class (not strictly needed, but it makes it
     complient with the stl rules).  Inheriting publicly from
     unary_function provides two typedef members argument_type and
     result_type
-    
+
   */
   class Isgreater : public std::unary_function<double,bool>
   {
@@ -95,17 +95,17 @@ namespace myfunctors
       For instance lm(3,4) will be set false at compile time!
     */
     /*
-      constexpr bool operator()(int const a, int const b)const 
+      constexpr bool operator()(int const a, int const b)const
       { return a %10 < b %10;}
     */
   };
   //! A more complex functor: cross product
-  /*!  
+  /*!
 
      To show that you may have functors with more, overloaded, call
     operators and operators that takes more than 2 arguments.  It is
     only an example.
-    
+
     \note A note, all those operators could have been declared static
     since they do not use non-statice member variables (indeed there
     are no member variables!).
@@ -123,6 +123,5 @@ namespace myfunctors
     //! Computes  \f$ a\cdot b\times c\f$
     double operator()(Vector3D const & a, Vector3D const & b,Vector3D const & c)const;
   };
-}// end namespace    
+}// end namespace
 #endif
-      
