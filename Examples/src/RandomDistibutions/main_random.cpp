@@ -27,9 +27,13 @@
  *  if file=true it will also produce a file with name file.dat with the
  *  values.
  *  By default it does not produce any file
+ *  \param d  a distribution
+ *  \param name A name for output and file
+ *  \param file true is you want a file with generated numbers (def. false)
+ *  \param hist true if you want a poor man histogram on the screen (true)
  */
 template <typename Distr, typename Eng>
-void distr (Distr d, Eng & e, const std::string& name,bool file=false)
+void distr (Distr & d, Eng & e, const std::string& name,bool file=false, bool hist=true)
 {
   // The engine produce integer numbers whose width depends on the
   // engine (and possibly the chosen engine template argummnts)
@@ -39,41 +43,50 @@ void distr (Distr d, Eng & e, const std::string& name,bool file=false)
   // typedef typename Distr::result_type distr_result_type;
   // Remember to use typename since we have template parameter dependent types
   //
+  // Number of samples
+  constexpr int N=20000;
   std::ofstream outfile;
   if (file)
     {
       std::string filename=name + std::string(".dat");
       outfile.open(filename);
+      outfile<<N<<"\n";
     }
   // print min, max and four example values
   std::cout << name << ":" << std::endl;
   std::cout << "- min():  " << d.min() << std::endl; 
   std::cout << "- max():  " << d.max() << std::endl; 
-  std::cout << "- values: " << d(e) << ' ' << d(e) << ' '
+  std::cout << "- some values: " << d(e) << ' ' << d(e) << ' '
 	    << d(e) << ' ' << d(e) << std::endl; 
-
+  std::vector<typename Distr::result_type> values;
+  values.reserve(N);
+  for (int i=0; i<N; ++i)
+    {
+      values.emplace_back(d(e));
+      if(file)outfile<<values.back()<<"\n";
+    }
+  if(file)outfile.close();
   // Make an istogram of the generated values
   // For simplicity we convert them to integers
   // As key we use long long to account for big numbers
-  std::map<long long,int> valuecounter;
-  for (int i=0; i<200000; ++i)
+  if (hist)
     {
-        auto value = d(e);
-        if(file)outfile<<d(e)<<"\n";
-        valuecounter[value]++;
-    }
-  // close file stream
-  if(file)outfile.close();
-    // and print the resulting distribution
-    std::cout << "====" << std::endl;
-    for (auto elem : valuecounter) {
+      std::map<long long,unsigned int> valuecounter;
+      for (int i=0; i<N; ++i)
+        {
+          auto value = values[i];
+          valuecounter[value]++;// this works!
+        }
+      // print the resulting distribution on the screen
+      std::cout << "====" << std::endl;
+      for (auto elem : valuecounter) {
         std::cout << std::setw(3) << elem.first << ": "
-                                  << elem.second << std::endl;
+                  << elem.second << std::endl;
+      }
     }
-    std::cout << "====" << std::endl;
-    std::cout << std::endl;
+  std::cout << "====" << std::endl;
+  std::cout << std::endl;
 }
-
 //! Example printing several distributions.
 /*!
   All distribution have a defualt constructor which sets the parameter
@@ -121,7 +134,13 @@ int main()
   distr(wd,e,"weibull_distribution",file);
 
   //This produces a very "elongated" distribution
-  // so I have commented it out
-  //  std::student_t_distribution<> sd;
-  //distr(sd,e,"student_t_distribution",file);
+  //so I am not printing on the scrren
+  std::student_t_distribution<> sd;
+  distr(sd,e,"student_t_distribution",true,false);
+  // Now a discrete distribution. The constructor
+  // may take different forms, in this case we give the
+  // weights for the values
+  std::discrete_distribution<int> ddist{1.,3.,6.,1.,1.,10.};
+  distr(ddist,e,"discrete_distribution",true,true);
+  
 }
