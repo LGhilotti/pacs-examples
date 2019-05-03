@@ -6,7 +6,7 @@
 #include <stdexcept>
 #include <limits>
 namespace Geometry{
-  
+
   double distance(Point2D const & a, Point2D const & b){
     // Not very efficient. This function should be implemented either
     // as friend or as a method, to access private members.
@@ -16,12 +16,12 @@ namespace Geometry{
 		     );
   }
   // ********************* BASE CLASS **********************
-  
+
   AbstractPolygon::AbstractPolygon(Vertices const & v, bool check):vertexes(v)
   {
     if (check) this->checkConvexity();
   }
-  
+
   void AbstractPolygon::showMe(std::ostream & out)const
   {
     if (this->size()==0){
@@ -36,7 +36,7 @@ namespace Geometry{
     if(this->isconvex) std::cout<<" Polygon is convex"<<std::endl;
     else std::cout<<" Polygon is not convex"<<std::endl;
   }
-  
+
   void AbstractPolygon::checkConvexity()
   {
     Vertices const & myV(this->vertexes);
@@ -75,20 +75,20 @@ namespace Geometry{
 	    {
 	      this->isconvex=false;
 	      return;
-	    } 
+	    }
 	}
       }// end for
     this->isconvex=true;
     return;
   }
-  
-  
-  
+
+
+
   // ****   POLYGON
-  
-  Polygon::Polygon(Vertices const & v): AbstractPolygon(v) {}
-  
-  
+
+  Polygon::Polygon(Vertices const & v): AbstractPolygon(v) {} //delegated construction
+
+
   //! To compute the area of a polygon we use the divergence theorem.
   /*!
     \f$ int_P d\Omega = 1/2 \int{\partial P} xn_x d\gamma\f$
@@ -100,7 +100,7 @@ namespace Geometry{
     double result(0);
     Vertices const & Ver(this->vertexes);
     // I am using C++11 sintax. decltype(expr) returns the
-    // type of the expression expr. (I could have used Vertices::size_type, 
+    // type of the expression expr. (I could have used Vertices::size_type,
     // or just int, here I wanted to show some features of the new standard).
     for (decltype(siz) i=0; i<siz;++i){
       // Current point I use references to avoid unnecessary construction
@@ -113,7 +113,7 @@ namespace Geometry{
     }
     return 0.5*result;
   }
-  
+
   void Polygon::showMe(std::ostream & out)const
   {
     std::cout<<" A Generic Polygon"<<std::endl;
@@ -121,7 +121,7 @@ namespace Geometry{
   }
 
   // ********************* SQUARE **********************
-  Square::Square(Vertices const & v): AbstractPolygon(v,false) 
+  Square::Square(Vertices const & v): AbstractPolygon(v,false)
   {
     this->isconvex=true;
     if(v.size() != 4){
@@ -148,29 +148,29 @@ namespace Geometry{
     vertexes.push_back(Point2D(origin.x()-length*s,
 			       origin.y()+length*c));
   }
-  
+
   double Square::area() const{
     if(this->size()==0) return 0.0;
-    // I want the area with sign, positive if the quad is 
-    // oriented counterclockwise. So the easiest thing is to use the 
+    // I want the area with sign, positive if the quad is
+    // oriented counterclockwise. So the easiest thing is to use the
     // formula using cross product (even if it is not the most efficient choice)
     Point2D v(this->vertexes[1]-this->vertexes[0]);
     Point2D w(this->vertexes[2]-this->vertexes[0]);
     // area = v \times w. Positive if square counterclockwise oriented
     return v.x()*w.y()-v.y()*w.x();
     ;}
-  
+
   void Square::showMe(std::ostream & out) const
   {
     out<<"A Square"<<std::endl;
     AbstractPolygon::showMe(out);
   }
-  
-  
+
+
   //********************* TRIANGLE **********************
-  
+
   Triangle::Triangle(Vertices const & v):AbstractPolygon(v,false){
-    this->isconvex=true;    
+    this->isconvex=true;
     // Check if we give 3 vertices
     // We may use assert, in this case we would disable the control
     // in the released version (-DNDEBUG). We prefer here to exit the program
@@ -178,19 +178,19 @@ namespace Geometry{
       throw std::runtime_error(" A triangle must be created giving three vertices");
     }
   }
-  
+
 
   double Triangle::area() const
   {
     if(this->size()==0) return 0.0;
-    // I use the cross product since this is a 
+    // I use the cross product since this is a
     // signed area!
     Point2D v(this->vertexes[1]-this->vertexes[0]);
     Point2D w(this->vertexes[2]-this->vertexes[0]);
     // area = 0.5* v \times w. Positive if triangle counterclockwise oriented
     return 0.5*(v.x()*w.y()-v.y()*w.x());
     ;}
-  
+
   void Triangle::showMe(std::ostream & out) const{
     out<<"A Triangle"<<std::endl;
     AbstractPolygon::showMe(out);

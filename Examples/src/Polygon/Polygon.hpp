@@ -5,7 +5,7 @@
 #include <array>
 #include <utility>
 
-/*!  @file Polygon.hpp 
+/*!  @file Polygon.hpp
   @brief This is an example of class hierarchy that
   represents poligonal object.
 
@@ -13,13 +13,13 @@
   represent a first example of class hyerarchy with public
   inheritance. The class `AbstractPolygon` defines the general public
   interface of all other classes representing polygonal objects.
-  
+
   We make use of some syntax of the C++11 new standard so you need to
   compile with *-std=c++11*
    */
 namespace Geometry
 {
-  
+
 
   //! A class that holds 2D points
   /*! It also represents a vector in R2
@@ -54,7 +54,7 @@ namespace Geometry
   using R2Vector=Point2D;
 
   //! subtraction operator.
-  /*!  
+  /*!
     It is defined in the header file because I want it to be
     inline.
   */
@@ -64,7 +64,7 @@ namespace Geometry
   }
 
   //! Addition operator.
-  /*!  
+  /*!
     It is defined in the header file because I want it to be
     inline.
   */
@@ -75,7 +75,7 @@ namespace Geometry
 
   //! Distance between points
   double distance(Point2D const & a, Point2D const & b);
- 
+
   //! Polygon vertices are just vectors of points.
   using Vertices=std::vector<Point2D>;
 
@@ -84,12 +84,12 @@ namespace Geometry
   {
   public:
     //! Constructor taking vertices
-    /*! 
+    /*!
       It checks convexity if check=true
      */
     AbstractPolygon(Vertices const & v, bool check=true);
     //! Default constructor is defaulted
-    /*! 
+    /*!
       It is up to the derived classes to fill the vertexex and other info correctly
     */
     AbstractPolygon()=default;
@@ -145,7 +145,7 @@ namespace Geometry
     //! Destructor
     virtual ~Polygon(){};
     /*!
-      The area is positive if vertices are given in 
+      The area is positive if vertices are given in
       counterclockwise order
     */
     virtual double area() const;
@@ -165,7 +165,7 @@ namespace Geometry
     /*!
       /param origin Point which gives the first vertex of the square.
       /param length The length of the side.
-      /param angle In radians, tells how the square is  rotated. 
+      /param angle In radians, tells how the square is  rotated.
      */
     Square(Point2D origin, double length,double angle=0.0);
     Square(Square const &)=default;
@@ -173,11 +173,11 @@ namespace Geometry
     Square & operator=(const Square &)=default;
     Square & operator=(Square &&)=default;
     //! Specialised version for squares
-    double area() const;
+    double area() const override;
     //! Specialised version for squares.
-    void showMe(std::ostream & out=std::cout) const;
+    void showMe(std::ostream & out=std::cout) const override;
   };
-  
+
   //! A triangle
   class Triangle final: public AbstractPolygon
   {
@@ -188,11 +188,11 @@ namespace Geometry
     Triangle & operator=(const Triangle &)=default;
     Triangle & operator=(Triangle &&)=default;
     //! Specialised for Triangles
-    virtual double area() const;
+    virtual double area() const override;
     //! Specialised for Triangles
-    virtual void showMe(std::ostream & out=std::cout) const;
+    virtual void showMe(std::ostream & out=std::cout) const override;
   };
-  
+
 }
 
 #endif
