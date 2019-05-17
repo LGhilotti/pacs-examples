@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <cstdlib>
-/*!  @brief A simple example of file streams.  
+/*!  @brief A simple example of file streams.
 
   @details File streams
   are steams connected to a file. All methods of an iostream are inherited

@@ -43,14 +43,14 @@ main (int argc, char *argv[])
 
   // MPI_Alltoall is much simpler!
   if (0) {
-    //
+    MPI_Alltoall(MPI_IN_PLACE, 0,0,&(recvbuff[0]),1,MPI_INT,MPI_COMM_WORLD);
   }
 
    // MPI_Allgather is much simpler!
   if (1) {
-    //
+   MPI_Allgather(MPI_IN_PLACE,0,MPI_DATATYPE_NULL,&(recvbuff[0]),1,MPI_INT,MPI_COMM_WORLD);
   }
-  
+
   for (int irank = 0; irank < size; ++irank) {
     if (rank == irank) {
       std::cout << " rank " << rank << " received messages ";
@@ -60,7 +60,7 @@ main (int argc, char *argv[])
     }
     MPI_Barrier (MPI_COMM_WORLD);
   }
-  
+
   MPI_Finalize ();
   return 0;
 }

@@ -56,8 +56,8 @@ export DEBUG
 ifeq ($(DEBUG),no)
   OPTFLAGS=-O3
   LIBRARIES+=-L$(PACS_LIB_DIR)  $(OTHER_LIBRARIES)
-  LDFLAGS+= -Wl,-rpath=$(PACS_LIB_DIR)
-#  LDFLAGS+= -Wl,-rpath=$(PACS_LIB_DIR) -Wl,-E
+  #LDFLAGS+= -Wl,-rpath=$(PACS_LIB_DIR)
+  LDFLAGS+= -Wl,-rpath=$(PACS_LIB_DIR) -Wl,-E
 
 else
   OPTFLAGS=-g -O0
@@ -111,6 +111,7 @@ all:
 	@echo "make dynamic makes dynamic library"
 	@echo "make exec compiles executable"
 	@echo "make depend just makes dependency file"
+	@echo "make alllib makes all libraries"
 	@echo "make clean cleans all not library"
 	@echo "make distclean cleans all"
 #	@echo "make install installs in the root directory"
@@ -124,11 +125,11 @@ all:
 depend: $(DEPEND)
 
 static:
-	$(RM) -f *.o
+#	$(RM) -f *.o
 	$(MAKE) library LIBTYPE=STATIC
 #	$(MAKE) exec LIBTYPE=STATIC
 dynamic:
-	$(RM) -f *.o
+#	$(RM) -f *.o
 	$(MAKE) library LIBTYPE=DYNAMIC
 #	$(MAKE) exec LIBTYPE=DYNAMIC
 
@@ -147,6 +148,11 @@ distclean:
 	$(RM) -r -f ./doc *.a *.so
 	$(RM) -f *.out *.bak *~ $(DEPEND)
 
+alllib:
+	$(MAKE) clean
+	$(MAKE) static DEBUG=no
+	$(MAKE) clean
+	$(MAKE) dynamic DEBUG=no
 doc:
 	doxygen $(DOXYFILE)
 
@@ -169,13 +175,13 @@ $(STATIC_LIBFILE3): $(STATIC_LIBFILE3)($(LIB3_OBJS))
 #	ar -r $(STATIC_LIBFILE3) $(LIB3_OBJS)
 
 $(DYNAMIC_LIBFILE): $(LIB_OBJS)
-	$(CXX) -shared $(OPTFLAGS)  $(LIB_OBJS) $(LIBLIB) -o $(DYNAMIC_LIBFILE)
+	$(CXX) -shared $(LDFLAGS)  $(LIB_OBJS) $(LIBLIB) -o $(DYNAMIC_LIBFILE)
 
 $(DYNAMIC_LIBFILE2): $(LIB2_OBJS)
-	$(CXX) -shared $(OPTFLAGS)  $(LIB2_OBJS) $(LIBD) -o $(DYNAMIC_LIBFILE2)
+	$(CXX) -shared $(LDFLAGS)  $(LIB2_OBJS) $(LIBD) -o $(DYNAMIC_LIBFILE2)
 
 $(DYNAMIC_LIBFILE3): $(LIB3_OBJS)
-	$(CXX) -shared $(OPTFLAGS) $(LIB3_OBJS) -o $(DYNAMIC_LIBFILE3)
+	$(CXX) -shared $(LDFLAGS) $(LIB3_OBJS) -o $(DYNAMIC_LIBFILE3)
 
 $(DEPEND): $(SRCS)
 	$(RM) $(DEPEND)

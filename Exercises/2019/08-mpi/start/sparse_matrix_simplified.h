@@ -49,7 +49,7 @@ public:
   /// Init an empty sparse matrix.
   void init ();
 
-  /// Recompute sparse matrix properties.
+  /// Recompute sparse matrix properties (set nnz and m)
   void set_properties ();
 
   /// Default constructor.
@@ -89,7 +89,7 @@ public:
        std::vector<int> &col_ind,
        std::vector<int> &row_ptr,
        int base);
-    
+
   /// Convert row-oriented sparse matrix to CSR format.
   void
   csr (std::vector<double> &a,
@@ -116,7 +116,7 @@ public:
   reset ();
 
   /// Sparse matrix increment. Automatically allocates additional entries.
-  void 
+  void
   operator+= (sparse_matrix &adm);
 
 };

@@ -1,13 +1,13 @@
 #include "sparse_matrix_simplified.h"
 
 int
-conn (int inode, int iel)
+conn (int inode, int iel) //restituisce numerazione globale di vertice inode locale dell'elemento iel
 {
   int res = 0;
   int elcol, elrow;
-  elcol = iel / 4;
-  elrow = iel - elcol * 4;
-  res = elcol * 5 + elrow;
+  elcol = iel / 4; //indice colonna di iel secondo schema
+  elrow = iel - elcol * 4; //indice riga (partendo dal basso) di iel secondo schema
+  res = elcol * 5 + elrow; // res si posiziona nel vertice precedente di quello indicato localmente da inode
   if (inode == 1) res += 1;
   if (inode == 2) res += 5;
   if (inode == 3) res += 6;
@@ -20,14 +20,14 @@ main (int argc, char *argv[])
 
   int is, ie, is_elems, ie_elems;
   sparse_matrix A;
-  
+
   std::vector<int> row_ptr, col_ind;
   std::vector<double> value;
-  
+
   A.resize (55);
   is_elems = 0; ie_elems = 40; is = 0; ie = 55;
-  std::cout << "runing serially\n" ; is_elems = 0; ie_elems = 40; is = 0; ie = 55; 
-   
+  std::cout << "runing serially\n" ; is_elems = 0; ie_elems = 40; is = 0; ie = 55;
+
   std::vector<std::vector<double>> locmatrix =
     {{2,-1,-1,0}, {-1,2,0,-1},{-1,0,2,-1},{0,-1,-1,2}};
 
@@ -43,26 +43,26 @@ main (int argc, char *argv[])
         }
 
   A.csr (value, col_ind, row_ptr, 0);
-  
- 
+
+
   std::cout << A << std::endl;
   std::cout << "\n\n";
-  
+
   std::cout << "a = [";
   for (auto ii : value)
     std::cout << ii << " ";
   std::cout << "];\n";
-  
+
   std::cout << "col_ind = [";
   for (auto ii : col_ind)
     std::cout << ii << " ";
   std::cout << "];\n";
-  
+
   std::cout << "row_ptr = [";
   for (auto ii : row_ptr)
-    std::cout << ii << " ";          
+    std::cout << ii << " ";
   std::cout << "];\n";
-            
+
 
   return 0;
 }
