@@ -154,3 +154,13 @@ make.dep
 /Examples/src/MetaProgramming/GCD/main_gcd
 /Examples/src/Polynomials/main_polynomials
 /Examples/src/Templates/Fibonacci/main_fibonacci
+/Examples/src/LinearAlgebra/Utilities/test/testAdjacency
+/Examples/src/LinearAlgebra/Utilities/test/testCooWrite
+/Examples/src/LinearAlgebra/Utilities/test/testMM_readers
+/Examples/src/LinearAlgebra/Utilities/test/testRotatingVector
+/Examples/src/Regression/README.pdf
+/Examples/src/Regression/auto/README.el
+/Examples/src/Templates/Interpolation/main_interpolation
+/Examples/src/MetaProgramming/DecltypeDeclVal/main_decltype
+/Examples/src/MetaProgramming/Trivial/main_trivial
+/Examples/src/FPExceptions/main_fpe
