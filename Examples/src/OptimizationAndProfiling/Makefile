@@ -46,19 +46,31 @@ CXXFLAGS+=$(OPTFLAGS)
 DEPEND=make.dep
 EXEC=esempioExtAss
 
-.phony+= unroll optimize debug massif leak profile
+.phony+= unroll optimize debug massif leak profile aliasing
 
-all: $(EXEC)
+all:
+	@echo "Possible Targets:"
+	@echo "esempioExtAss Use of some extended assert facilities"
+	@echo "aliasing An example of argument aliasing"
+	@echo "optimize Compare an optimized and an not optimized version"
+	@echo "leak Find a memory leak in a program with valgrind"
+	@echo "profile Program profiling with gprof"
+	@echo "massif Memory usage using valgrind"
+	@echo "debug Example for debugging"
+	@echo "coverage Program coverage with gcov"
+	@echo "lcoverage Program coverage with lcov"
 
 esempioExtAss:
 	$(CXX) $(CPPFLAGS) -g  esempioExtAss.cpp  rational.cpp -o esempioExtAss_debug
 	$(CXX) $(CPPFLAGS) -O2 -DNDEBUG esempioExtAss.cpp  rational.cpp -o esempioExtAss_release
 
-aliasing: aliasing.o
-
+aliasing: aliasing.cpp
+	$(CXX) $(CPPFLAGS) -std=c++14 -O3 -o aliasing aliasing.cpp
 clean:
-	$(RM) -f *.o *.s *.log.* massif* provamassif a.out esempio1* esempio0* esempio2 esempio3 leak *.E *.S result.dat aliasing
-	$(RM) -f esempioExtAss_debug  esempioExtAss_release *.txt unroll1_nounroll unroll1_unroll
+	$(RM)  *.o *.s *.log.* massif* provamassif a.out esempio1* esempio0* esempio2 esempio3 leak *.E *.S result.dat aliasing *.gcov *.gcda *.gcno esempio
+	$(RM)  esempioExtAss_debug  esempioExtAss_release *.txt unroll1_nounroll unroll1_unroll coverage.info
+	$(RM) -r html/
+
 
 distclean: clean
 	$(RM) core *.log gmon.out
@@ -101,3 +113,16 @@ massif:
 	valgrind --tool=massif --demangle=yes --log-file=provamassif.log --massif-out-file=massif.out\
         ./provamassif
 	ms_print massif.out > massif.txt
+
+coverage:
+	$(CXX) -g -fprofile-arcs -ftest-coverage chrono.cpp esempio.cpp -o esempio
+	./esempio -i dati
+	gcov ./esempio > summary.txt
+
+lcoverage:
+	$(CXX) -g -fprofile-arcs -ftest-coverage chrono.cpp esempio.cpp -o esempio
+	./esempio -i dati
+	lcov --capture --directory . --output-file coverage.info
+	genhtml coverage.info --output-directory html
+
+
