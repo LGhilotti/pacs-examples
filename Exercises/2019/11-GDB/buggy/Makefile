@@ -1,5 +1,5 @@
 CXX ?= g++
-
+CXXFLAGS += -ggdb -O0 # --coverage if you want lcov
 
 all: integer-list
 

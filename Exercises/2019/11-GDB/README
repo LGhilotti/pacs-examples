@@ -2,7 +2,7 @@ Example of debugging.
 
 The program 'integer-list' in the directory 'buggy' has:
 
-1) One compile error
+1) One compile error 
 2) One run-time error
 3) One memory leak
 4) A potential memory leak that is not captured in the main

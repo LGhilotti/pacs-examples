@@ -5,19 +5,19 @@ class Node
 public:
   // constructors / destructor
   Node () : next (NULL), previous (NULL) { }
-  
+
   Node (int a) : next (NULL), previous (NULL), data (a) { }
 
   ~Node ()
   { if (next) delete next; }
-  
-  // set/get interface 
+
+  // set/get interface
   void
   setData (int a) { data = a; }
-  
+
   int
   getData (void) { return data; }
-  
+
   void
   setNext (Node* theNext)
   { next = theNext; }
@@ -31,12 +31,12 @@ public:
 
   Node*
   getPrevious (void) { return previous; }
-  
+
   // list capabilities
   // return true if node is the first of the list, false otherwise
   bool
   isFirst (void) { return !previous; }
-  
+
   // return true if node is the last of the list, false otherwise
   bool
   isLast (void) { return !next; }
@@ -49,19 +49,19 @@ public:
     int ret = 0;
     while (! t->isLast ())
       {
-        t = next;
+        t = t->getNext();
         ret++;
       }
     return ret;
   }
-  
+
   // append a new given node at the end of the list
   void
   append (Node* theNext)
   {
     Node* t = this;
     while (! t->isLast ())
-      t = next;
+      t = t->getNext();
 
     t -> setNext (theNext);
     theNext -> setPrevious (t);
@@ -73,21 +73,23 @@ public:
   {
     Node* t = this;
     while (! t->isLast ())
-      t = next;
+      t = t->getNext();
 
     Node* theNewNode = new Node(a);
     t->setNext (theNewNode);
     theNewNode->setPrevious (t);
   }
-  
+
   // remove this node from the list
   void
   erase (void)
   {
     previous->setNext (next);
     next->setPrevious (previous);
+    next=nullptr;
+    delete this;
   }
-  
+
   // replace this node with a given node
   void
   replaceWith (Node* replacement)
@@ -107,7 +109,7 @@ public:
     Node* t = this;
     while(! t->isLast ())
       {
-        t = next;
+        t = t->getNext();
         if (t->getData () == needle)
           return t;
       }
@@ -121,13 +123,13 @@ public:
     while(! t->isLast ())
       {
         std::cout << t->getData () << ", ";
-        t = next;
+        t = t->getNext();
       }
-    std::cout << t.getData () << std::endl;
+    std::cout << t->getData () << std::endl;
   }
-  
+
 protected:
-  
+
   // pointer to next node in list
   Node* next;
 

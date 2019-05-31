@@ -9,8 +9,8 @@ concrete2 : public abstract
 {
 
 public :
-  
-  double eval (double x);
+
+  double eval (double x); //override
   ~concrete2 ();
 };
 
